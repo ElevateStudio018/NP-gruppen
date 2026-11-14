@@ -33,40 +33,6 @@
   }, { rootMargin: '-45% 0px -50% 0px' });
   sections.forEach((s) => navIO.observe(s));
 
-  /* Reveal on scroll */
-  const revealIO = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add('is-visible'); revealIO.unobserve(en.target); }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  $$('.reveal').forEach((el, i) => {
-    // stagger siblings in grids
-    const parent = el.parentElement;
-    if (parent && parent.matches('.services, .steps, .reviews, .gallery')) {
-      el.style.transitionDelay = `${([...parent.children].indexOf(el) % 4) * 0.08}s`;
-    }
-    revealIO.observe(el);
-  });
-
-  /* Count-up numbers */
-  const countIO = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (!en.isIntersecting) return;
-      const el = en.target;
-      const end = +el.dataset.count;
-      const start = performance.now();
-      const dur = 1400;
-      const tick = (t) => {
-        const p = Math.min((t - start) / dur, 1);
-        el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-      countIO.unobserve(el);
-    });
-  }, { threshold: 0.6 });
-  $$('[data-count]').forEach((el) => countIO.observe(el));
-
   /* Pre-select service when clicking "Begär offert" on a card */
   const select = $('#tjanst');
   $$('[data-service]').forEach((a) => a.addEventListener('click', () => {
